@@ -4,13 +4,16 @@ spring:
   kafka:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       group-id: "consumer-group"
       auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: "com.justeattakeaway.codechallenge.messaging"
     bootstrap-servers: "localhost:9092"
+
 
   rabbitmq:
     host: "localhost"
@@ -20,7 +23,7 @@ spring:
 
   data:
     mongodb:
-      uri: "mongodb://localhost:27017/mongodatabase"
+      uri: "mongodb://root:example@localhost:27017/mongodatabase?authSource=admin"
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:h2database
@@ -31,3 +34,12 @@ spring:
 
   #    http://localhost:8080/h2-console
   h2.console.enabled: true
+
+
+server.port: ${port:8080}
+
+application:
+  opponentApiHost: ${opponent:http://localhost:8080}
+
+logging.level:
+  com.takeaway.technicaltask.game: debug
